@@ -8,7 +8,7 @@ Este é um projeto simples com o objetivo de integrar o back end ao front.
 ```
 - JDK 11
 - Postman
-- 
+- PostgreSQL
 ```
 
 ## Clonando e configurando o projeto pelo Eclipse
