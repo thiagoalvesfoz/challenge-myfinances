@@ -17,14 +17,13 @@ import com.challenge.myfinances.model.exception.BusinessRuleException;
 import com.challenge.myfinances.model.repository.LancamentoRepository;
 import com.challenge.myfinances.model.service.LancamentoService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class LancamentoServiceImpl implements LancamentoService {
 	
-	private LancamentoRepository repository;
-	
-	public LancamentoServiceImpl(LancamentoRepository repository) {
-		this.repository = repository;
-	}
+	private final LancamentoRepository repository;
 
 	@Override
 	@Transactional
@@ -52,7 +51,6 @@ public class LancamentoServiceImpl implements LancamentoService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Lancamento> buscar(Lancamento lancamentofiltro) {
-		// TODO Auto-generated method stub
 		Example<Lancamento> example = Example.of( lancamentofiltro, 
 				ExampleMatcher.matching()
 				.withIgnoreCase()
@@ -65,7 +63,6 @@ public class LancamentoServiceImpl implements LancamentoService {
 	public void atualizarStatus(Lancamento lancamento, StatusLancamento status) {
 		 lancamento.setStatus(status);
 		 atualizar(lancamento);
-		
 	}
 
 	@Override
@@ -93,15 +90,15 @@ public class LancamentoServiceImpl implements LancamentoService {
 	@Override
 	public Lancamento obterPorId(Long id) {
 		return repository.findById(id)
-				.orElseThrow( () -> new BusinessRuleException("Lancamento não encontrado"));
+				.orElseThrow( () -> new BusinessRuleException("Lançamento não encontrado"));
 
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public BigDecimal obterSaldoPorUsuario(Long id) {
-		BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
-		BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+		BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA, StatusLancamento.EFETIVADO);
+		BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA, StatusLancamento.EFETIVADO);
 		
 		if(receitas == null) receitas = BigDecimal.ZERO;
 		
